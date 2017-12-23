@@ -140,7 +140,7 @@ export function expandTimeline(timelineId, path, params = {}) {
     }
 
     params.max_id = ids.last();
-    params.limit  = 10;
+    params.limit  = 30;
 
     dispatch(expandTimelineRequest(timelineId));
 
