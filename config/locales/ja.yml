@@ -15,13 +15,13 @@ ja:
       <h3>ルールを書くのに適した場所</h3>
       <p>詳細説明が設定されていません。</p>
     features:
-      humane_approach_body: 他の SNS の失敗から学び、Mastodon はソーシャルメディアが誤った使い方をされることの無いように倫理的な設計を目指しています。
+      humane_approach_body: Mastodon は、ソーシャルメディアが間違った使い方をされることの無いように、倫理的な設計を志向しています。これは、他のソーシャルネットワークでの失敗から学んだことです。
       humane_approach_title: より思いやりのある設計
-      not_a_product_body: Mastodon は営利的な SNS ではありません。広告や、データの収集・解析は無く、またユーザーの囲い込みもありません。
-      not_a_product_title: あなたは人間であり、商品ではありません
-      real_conversation_body: 好きなように書ける500文字までの投稿や、文章やメディアの内容に警告をつけられる機能で、思い通りに自分自身を表現することができます。
-      real_conversation_title: 本当のコミュニケーションのために
-      within_reach_body: デベロッパーフレンドリーな API により実現された、iOS や Android、その他様々なプラットフォームのためのアプリでどこでも友人とやりとりできます。
+      not_a_product_body: Mastodon は、非営利のソーシャルネットワークです。広告・統計解析・ユーザーの囲い込みはありません。
+      not_a_product_title: 他の誰でもない、あなたの為の SNS
+      real_conversation_body: 1投稿に500文字まで事細かに書き込めるほか、内容に警告をつけることができるので、自分の考えを好きなように表現できます。
+      real_conversation_title: 対面のようなコミュニケーション
+      within_reach_body: iOS や Android、その他様々なプラットフォームのためのアプリがあり、どこでも友人と一緒にいることができます。これらは、開発者にフレンドリーなAPIにより実現されています。
       within_reach_title: いつでも身近に
     find_another_instance: 他のインスタンスを探す
     generic_description: "%{domain} は、Mastodon インスタンスの一つです"
