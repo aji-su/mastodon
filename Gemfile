@@ -13,8 +13,10 @@ gem 'hamlit-rails', '~> 0.2'
 gem 'pg', '~> 0.20'
 gem 'pghero', '~> 1.7'
 gem 'dotenv-rails', '~> 2.2'
+gem 'prome', :git => "https://github.com/yukimochi/prome.git"
 
 gem 'aws-sdk', '~> 2.10', require: false
+gem 'fog-azure-rm', :git => "https://github.com/yukimochi/fog-azure-rm.git"
 gem 'fog-core', '~> 1.45'
 gem 'fog-local', '~> 0.4', require: false
 gem 'fog-openstack', '~> 0.1', require: false

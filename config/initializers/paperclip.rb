@@ -73,6 +73,19 @@ elsif ENV['SWIFT_ENABLED'] == 'true'
     fog_host: ENV['SWIFT_OBJECT_URL'],
     fog_public: true
   )
+  elsif ENV['AZURE_ENABLED'] == 'true'
+    require 'fog/azurerm'
+    
+      Paperclip::Attachment.default_options.merge!(
+        fog_credentials: {
+          provider: 'AzureRM',
+          azure_storage_account_name: ENV['AZURE_ACCOUNT_NAME'],
+          azure_storage_access_key: ENV['AZURE_ACCESS_KEY'],
+          environment: ENV['AZURE_ENVIRONMENT'],
+        },
+        fog_directory: ENV['AZURE_CONTAINER'],
+        fog_host: "#{ENV['AZURE_BLOB_URL']}/#{ENV['AZURE_CONTAINER']}"
+      )
 else
   require 'fog/local'
 
