@@ -7,11 +7,13 @@ services:
 ### Uncomment to enable DB persistance
     volumes:
       - ./postgres:/var/lib/postgresql/data
+      - ./pg_socket:/socket
 
   i_redis:
     restart: always
     image: redis:alpine
 ### Uncomment to enable REDIS persistance
+    command: redis-server /data/redis.conf
     volumes:
       - ./redis:/data
 
@@ -20,8 +22,7 @@ services:
     image: yukimochi/alpine-pgbouncer
     volumes:
       - ./pgbouncer:/etc/pgbouncer
-    expose:
-      - "5432"
+      - ./pg_socket:/socket
     depends_on:
       - i_db
 
@@ -33,9 +34,8 @@ services:
     environment:
       - WEB_CONCURRENCY=1
       - MAX_THREADS=2
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
-    ports:
-      - "3200:3000"
+      - SOCKET=socket/puma.sock
+    command: bundle exec rails s
     depends_on:
       - i_bouncer
       - i_redis
@@ -43,18 +43,25 @@ services:
       - ./public/assets:/mastodon/public/assets
       - ./public/packs:/mastodon/public/packs
       - ./public/system:/mastodon/public/system
+      - ./socket:/mastodon/socket
+      - ./pg_socket:/pg_socket
+      - ./redis:/redis
 
   i_streaming:
     build: .
     image: gargron/mastodon:innocent
     restart: always
     env_file: .env.production
+    environment:
+      - SOCKET=socket/node.sock
     command: npm run start
-    ports:
-      - "4200:4000"
     depends_on:
       - i_bouncer
       - i_redis
+    volumes:
+      - ./socket:/mastodon/socket
+      - ./pg_socket:/pg_socket
+      - ./redis:/redis
 
   i_sidekiq:
     build: .
@@ -71,3 +78,5 @@ services:
       - i_redis
     volumes:
       - ./public/system:/mastodon/public/system
+      - ./pg_socket:/pg_socket
+      - ./redis:/redis
