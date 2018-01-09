@@ -1,4 +1,5 @@
 const os = require('os');
+const fs = require('fs');
 const throng = require('throng');
 const dotenv = require('dotenv');
 const express = require('express');
@@ -552,9 +553,21 @@ const startWorker = (workerId) => {
     });
   }, 30000);
 
-  server.listen(process.env.PORT || 4000, process.env.BIND || '0.0.0.0', () => {
-    log.info(`Worker ${workerId} now listening on ${server.address().address}:${server.address().port}`);
-  });
+  if (process.env.SOCKET) {
+    try {
+      fs.unlinkSync(process.env.SOCKET);
+    } catch(e) {
+    }
+    server.listen(process.env.SOCKET, () => {
+      fs.chmodSync(process.env.SOCKET, '777')
+      log.info(`Worker ${workerId} now listening on ${server.address()}`);
+    });
+  }
+  else {
+    server.listen(process.env.PORT || 4000, process.env.BIND || '0.0.0.0', () => {
+      log.info(`Worker ${workerId} now listening on ${server.address().address}:${server.address().port}`);
+    });
+  }
 
   const onExit = () => {
     log.info(`Worker ${workerId} exiting, bye bye`);
