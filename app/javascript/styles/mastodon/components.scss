@@ -1779,6 +1779,7 @@
   > .mastodon {
     background: url('../images/logo_full.svg') no-repeat left bottom / contain;
     flex: 1;
+    animation: glitch 2s steps(100) infinite;
   }
 }
 

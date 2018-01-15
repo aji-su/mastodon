@@ -230,6 +230,7 @@
           position: relative;
           top: 4px;
           left: -10px;
+          animation: glitch 2s steps(100) infinite;
         }
       }
 
@@ -696,6 +697,7 @@
         .brand img {
           left: 0;
           top: 0;
+          animation: glitch 2s steps(100) infinite;
         }
       }
 
