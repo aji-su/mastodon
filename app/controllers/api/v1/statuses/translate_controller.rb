@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'http'
-require 'nokogiri'
-
 class Api::V1::Statuses::TranslateController < Api::BaseController
+  include Translation
+
   before_action -> { doorkeeper_authorize! :read }
   before_action :require_user!
 
@@ -12,10 +11,7 @@ class Api::V1::Statuses::TranslateController < Api::BaseController
   def index
     @status = requested_status
 
-    res = HTTP.headers('Ocp-Apim-Subscription-Key': ENV['AZURE_TRANSLATE_SUBSUCRIBE_KEY'])
-      .get("https://api.microsofttranslator.com/V2/Http.svc/Translate", params: {text: @status.text, to: I18n.locale || 'ja'})
-
-    @status.text << "\n[Translated] " + Nokogiri::XML.parse(res.to_s).text
+    @status.text << "\n" + translate(@status.text, I18n.locale || 'ja')
 
     render json: @status, serializer: REST::StatusSerializer
   end

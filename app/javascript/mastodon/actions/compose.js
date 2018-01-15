@@ -380,9 +380,11 @@ export function translate(text, lang) {
     return translateSuccess(text);
   }
 
+  const targetText = encodeURIComponent(text.replace(/[.\s\S]*\[Translated( from \w+?)?\] /, ''));
+
   return (dispatch, getState) => {
-    dispatch(translateRequest(text));
-    api(getState).get(`/api/v1/translate?text=${text.replace(/[.\s\S]*\[Translated\] /, '')}&to=${lang}`).then(response => {
+    dispatch(translateRequest(targetText));
+    api(getState).get(`/api/v1/translate?text=${targetText}&to=${lang}`).then(response => {
       dispatch(translateSuccess(response.data.text));
     }).catch(error => {
       dispatch(translateFail(error));
