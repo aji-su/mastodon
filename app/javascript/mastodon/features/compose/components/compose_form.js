@@ -20,6 +20,12 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import { length } from 'stringz';
 import { countableText } from '../util/counter';
 
+import AZURE_LANGS from '../../../locales/translate_languages_azure.json';
+import GOOGLE_LANGS from '../../../locales/translate_languages_google.json';
+import { TRANSLATE_FAIL } from '../../../actions/interactions';
+
+const TRANSLATE_LANGS = process.env.TRANSLATE_SERVICE === 'azure' ? AZURE_LANGS : GOOGLE_LANGS;
+
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
   spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Write your warning here' },
@@ -96,7 +102,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     this.props.onChangeSpoilerText(e.target.value);
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     // If this is the update where we've finished uploading,
     // save the last caret position so we can restore it below!
     if (!nextProps.is_uploading && this.props.is_uploading) {
@@ -104,7 +110,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     // This statement does several things:
     // - If we're beginning a reply, and,
     //     - Replying to zero or one users, places the cursor at the end of the textbox.
@@ -116,19 +122,19 @@ export default class ComposeForm extends ImmutablePureComponent {
       let selectionEnd, selectionStart;
 
       if (this.props.preselectDate !== prevProps.preselectDate) {
-        selectionEnd   = this.props.text.length;
+        selectionEnd = this.props.text.length;
         selectionStart = this.props.text.search(/\s/) + 1;
       } else if (typeof this._restoreCaret === 'number') {
         selectionStart = this._restoreCaret;
-        selectionEnd   = this._restoreCaret;
+        selectionEnd = this._restoreCaret;
       } else {
-        selectionEnd   = this.props.text.length;
+        selectionEnd = this.props.text.length;
         selectionStart = selectionEnd;
       }
 
       this.autosuggestTextarea.textarea.setSelectionRange(selectionStart, selectionEnd);
       this.autosuggestTextarea.textarea.focus();
-    } else if(prevProps.is_submitting && !this.props.is_submitting) {
+    } else if (prevProps.is_submitting && !this.props.is_submitting) {
       this.autosuggestTextarea.textarea.focus();
     }
   }
@@ -138,8 +144,8 @@ export default class ComposeForm extends ImmutablePureComponent {
   }
 
   handleEmojiPick = (data) => {
-    const position     = this.autosuggestTextarea.textarea.selectionStart;
-    const emojiChar    = data.native;
+    const position = this.autosuggestTextarea.textarea.selectionStart;
+    const emojiChar = data.native;
     this._restoreCaret = position + emojiChar.length + 1;
     this.props.onPickEmoji(position, data);
   }
@@ -176,10 +182,10 @@ export default class ComposeForm extends ImmutablePureComponent {
     return false;
   }
 
-  render () {
+  render() {
     const { intl, onPaste, showSearch } = this.props;
     const disabled = this.props.is_submitting;
-    const text     = [this.props.spoiler_text, countableText(this.props.text)].join('');
+    const text = [this.props.spoiler_text, countableText(this.props.text)].join('');
 
     let publishText = '';
 
@@ -190,8 +196,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     }
 
     const menu = [];
-    const languages = ['en', 'ja', 'af', 'ar', 'bn', 'bs-Latn', 'bg', 'ca', 'zh-CHS', 'zh-CHT', 'yue', 'hr', 'cs', 'da', 'nl', 'et', 'fj', 'fil', 'fi', 'fr', 'de', 'el', 'ht', 'he', 'hi', 'mww', 'hu', 'id', 'it', 'sw', 'tlh', 'tlh-Qaak', 'ko', 'lv', 'lt', 'mg', 'ms', 'mt', 'yua', 'no', 'otq', 'fa', 'pl', 'pt', 'ro', 'ru', 'sm', 'sr-Cyrl', 'sr-Latn', 'sk', 'sl', 'es', 'sv', 'ty', 'ta', 'th', 'to', 'tr', 'uk', 'ur', 'vi', 'cy'];
-    languages.forEach(lang => menu.push({ text: lang, action: () => this.handleTranslate(lang) }));
+    Object.keys(TRANSLATE_LANGS).map(langCode => menu.push({ text: `${langCode} : ${TRANSLATE_LANGS[langCode]}`, action: () => this.handleTranslate(langCode) }));
 
     return (
       <div className='compose-form'>
@@ -201,7 +206,7 @@ export default class ComposeForm extends ImmutablePureComponent {
           <div className='spoiler-input'>
             <label>
               <span style={{ display: 'none' }}>{intl.formatMessage(messages.spoiler_placeholder)}</span>
-              <input placeholder={intl.formatMessage(messages.spoiler_placeholder)} value={this.props.spoiler_text} onChange={this.handleChangeSpoilerText} onKeyDown={this.handleKeyDown} type='text' className='spoiler-input__input'  id='cw-spoiler-input' />
+              <input placeholder={intl.formatMessage(messages.spoiler_placeholder)} value={this.props.spoiler_text} onChange={this.handleChangeSpoilerText} onKeyDown={this.handleKeyDown} type='text' className='spoiler-input__input' id='cw-spoiler-input' />
             </label>
           </div>
         </Collapsable>
