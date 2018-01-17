@@ -18,9 +18,9 @@
   doorkeeper_cleanup_scheduler:
     cron: '<%= Random.rand(0..59) %> <%= Random.rand(0..2) %> * * 0'
     class: Scheduler::DoorkeeperCleanupScheduler
-  confirm_user_email_address_scheduler:
-    cron: '<%= Random.rand(0..59) %> <%= Random.rand(1..4) %> * * *'
-    class: Scheduler::ConfirmUserEmailAddressScheduler
+#  confirm_user_email_address_scheduler:
+#    cron: '<%= Random.rand(0..59) %> <%= Random.rand(1..4) %> * * *'
+#    class: Scheduler::ConfirmUserEmailAddressScheduler
   user_cleanup_scheduler:
     cron: '<%= Random.rand(0..59) %> <%= Random.rand(4..6) %> * * *'
     class: Scheduler::UserCleanupScheduler
