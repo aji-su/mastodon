@@ -1,2 +1,3 @@
 default: styles/application.scss
 naraku: styles/naraku.scss
+uncomfortable: styles/uncomfortable.scss
