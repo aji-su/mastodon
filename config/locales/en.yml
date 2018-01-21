@@ -706,6 +706,8 @@ en:
     title: "%{instance} Terms of Service and Privacy Policy"
   themes:
     default: Mastodon
+    naraku: Naraku
+    broken: Broken
   time:
     formats:
       default: "%b %d, %Y, %H:%M"

@@ -702,6 +702,10 @@ ja:
 
       <p>オリジナルの出典 <a href="https://github.com/discourse/discourse">Discourse privacy policy</a>.</p>
     title: "%{instance} 利用規約・プライバシーポリシー"
+  themes:
+    default: Mastodon
+    naraku: 奈落文字
+    broken: Broken
   time:
     formats:
       default: "%Y年%m月%d日 %H:%M"
