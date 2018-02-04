@@ -205,7 +205,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     const menu = [];
     Object.keys(TRANSLATE_LANGS).map(langCode => menu.push({ text: `${langCode} : ${TRANSLATE_LANGS[langCode]}`, action: () => this.handleTranslate(langCode) }));
 
-    const unclickable = disabled || this.props.is_uploading || length(text) > 500 || text.length === 0 || text.trim().length === 0;
+    const unclickable = disabled || this.props.is_uploading || length(text) > 500 || (text.length !== 0 && text.trim().length === 0);
 
     return (
       <div className='compose-form'>
