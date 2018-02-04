@@ -22,7 +22,6 @@ import { countableText } from '../util/counter';
 
 import AZURE_LANGS from '../../../locales/translate_languages_azure.json';
 import GOOGLE_LANGS from '../../../locales/translate_languages_google.json';
-import { TRANSLATE_FAIL } from '../../../actions/interactions';
 
 const TRANSLATE_LANGS = process.env.TRANSLATE_SERVICE === 'azure' ? AZURE_LANGS : GOOGLE_LANGS;
 
