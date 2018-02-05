@@ -40,6 +40,9 @@ config/deploy/*
 postgres
 redis
 
+/ssl_certs/*
+!/ssl_certs/.gitkeep
+
 # Ignore Apple files
 .DS_Store
 

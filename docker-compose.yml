@@ -7,8 +7,8 @@ services:
     networks:
       - internal_network
 ### Uncomment to enable DB persistance
-#    volumes:
-#      - ./postgres:/var/lib/postgresql/data
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
 
   redis:
     restart: always
@@ -16,20 +16,18 @@ services:
     networks:
       - internal_network
 ### Uncomment to enable REDIS persistance
-#    volumes:
-#      - ./redis:/data
+    volumes:
+      - ./redis:/data
 
   web:
     build: .
-    image: gargron/mastodon
+    image: theboss/mastodon
     restart: always
     env_file: .env.production
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     networks:
       - external_network
       - internal_network
-    ports:
-      - "3000:3000"
     depends_on:
       - db
       - redis
@@ -40,22 +38,20 @@ services:
 
   streaming:
     build: .
-    image: gargron/mastodon
+    image: theboss/mastodon
     restart: always
     env_file: .env.production
     command: npm run start
     networks:
       - external_network
       - internal_network
-    ports:
-      - "4000:4000"
     depends_on:
       - db
       - redis
 
   sidekiq:
     build: .
-    image: gargron/mastodon
+    image: theboss/mastodon
     restart: always
     env_file: .env.production
     command: bundle exec sidekiq -q default -q mailers -q pull -q push
@@ -68,6 +64,26 @@ services:
     volumes:
       - ./public/packs:/mastodon/public/packs
       - ./public/system:/mastodon/public/system
+
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - web
+      - streaming
+    networks:
+      - external_network
+      - internal_network
+    environment:
+      DOMAINS: 'masi.theboss.tech -> http://web:3000'
+      # STAGE: 'production'
+    volumes:
+      - ./ssl_certs:/var/lib/https-portal
+      - ./nginx-conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
+      - ./nginx-conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
+      - ./public:/var/lib/mastodon/public
 
 networks:
   external_network:

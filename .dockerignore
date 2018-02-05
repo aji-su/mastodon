@@ -11,3 +11,5 @@ vendor/bundle
 *~
 postgres
 redis
+ssl_certs
+nginx-conf
