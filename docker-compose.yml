@@ -1,14 +1,14 @@
 version: '3'
 services:
 
-  db:
-    restart: always
-    image: postgres:9.6-alpine
-    networks:
-      - internal_network
-### Uncomment to enable DB persistance
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
+#  db:
+#    restart: always
+#    image: postgres:9.6-alpine
+#    networks:
+#      - internal_network
+#### Uncomment to enable DB persistance
+#    volumes:
+#      - ./postgres:/var/lib/postgresql/data
 
   redis:
     restart: always
@@ -29,7 +29,7 @@ services:
       - external_network
       - internal_network
     depends_on:
-      - db
+#      - db
       - redis
     volumes:
       - ./public/assets:/mastodon/public/assets
@@ -46,7 +46,7 @@ services:
       - external_network
       - internal_network
     depends_on:
-      - db
+#      - db
       - redis
 
   sidekiq:
@@ -56,7 +56,7 @@ services:
     env_file: .env.production
     command: bundle exec sidekiq -q default -q mailers -q pull -q push
     depends_on:
-      - db
+#      - db
       - redis
     networks:
       - external_network
