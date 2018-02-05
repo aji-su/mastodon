@@ -78,7 +78,7 @@ services:
       - internal_network
     environment:
       DOMAINS: 'masi.theboss.tech -> http://web:3000'
-      # STAGE: 'production'
+      STAGE: 'production'
     volumes:
       - ./ssl_certs:/var/lib/https-portal
       - ./nginx-conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
