@@ -57,8 +57,3 @@ npm-debug.log
 yarn-error.log
 yarn-debug.log
 
-# Ignore Docker option files
-docker-compose.override.yml
-
-# Ignore version overwrite file
-config/initializers/version.rb
