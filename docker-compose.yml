@@ -77,7 +77,7 @@ services:
       - external_network
       - internal_network
     environment:
-      DOMAINS: 'masi.theboss.tech -> http://web:3000'
+      DOMAINS: 'theboss.tech -> http://web:3000'
       STAGE: 'production'
     volumes:
       - ./ssl_certs:/var/lib/https-portal
