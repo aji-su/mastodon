@@ -67,6 +67,8 @@ services:
 
   https-portal:
     image: steveltn/https-portal:1
+    restart: always
+    env_file: .env.production
     ports:
       - '80:80'
       - '443:443'
@@ -76,9 +78,6 @@ services:
     networks:
       - external_network
       - internal_network
-    environment:
-      DOMAINS: 'masi.theboss.tech -> http://web:3000'
-      STAGE: 'production'
     volumes:
       - ./ssl_certs:/var/lib/https-portal
       - ./nginx-conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
