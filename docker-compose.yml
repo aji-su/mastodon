@@ -55,8 +55,8 @@ services:
   sidekiq_default:
     <<: *mastodon
     environment:
-      - DB_POOL=10
-    command: bundle exec sidekiq -c 10 -q default
+      - DB_POOL=20
+    command: bundle exec sidekiq -c 20 -q default
 
   sidekiq_push_and_pull:
     <<: *mastodon
