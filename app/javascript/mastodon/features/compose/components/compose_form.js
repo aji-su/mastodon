@@ -59,6 +59,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     onPickEmoji: PropTypes.func.isRequired,
     onInsertYomigana: PropTypes.func.isRequired,
     showSearch: PropTypes.bool,
+    anyMedia: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -188,11 +189,11 @@ export default class ComposeForm extends ImmutablePureComponent {
     return false;
   }
 
-  render() {
-    const { intl, onPaste, showSearch } = this.props;
+  render () {
+    const { intl, onPaste, showSearch, anyMedia } = this.props;
     const disabled = this.props.is_submitting;
-    const text = [this.props.spoiler_text, countableText(this.props.text)].join('');
-
+    const text     = [this.props.spoiler_text, countableText(this.props.text)].join('');
+    const disabledButton = disabled || this.props.is_uploading || length(text) > 500 || (text.length !== 0 && text.trim().length === 0 && !anyMedia);
     let publishText = '';
 
     if (this.props.privacy === 'private' || this.props.privacy === 'direct') {
@@ -203,8 +204,6 @@ export default class ComposeForm extends ImmutablePureComponent {
 
     const menu = [];
     Object.keys(TRANSLATE_LANGS).map(langCode => menu.push({ text: `${langCode} : ${TRANSLATE_LANGS[langCode]}`, action: () => this.handleTranslate(langCode) }));
-
-    const unclickable = disabled || this.props.is_uploading || length(text) > 500 || (text.length !== 0 && text.trim().length === 0);
 
     return (
       <div className='compose-form'>
@@ -256,11 +255,11 @@ export default class ComposeForm extends ImmutablePureComponent {
         </div>
 
         <div className='compose-form__publish'>
-          <div className='compose-form__publish-button-wrapper'><Button text={publishText} onClick={this.handleSubmit} disabled={unclickable} block /></div>
+          <div className='compose-form__publish-button-wrapper'><Button text={publishText} onClick={this.handleSubmit} disabled={disabledButton} block /></div>
         </div>
 
         <div className='compose-form__publish'>
-          <div className='compose-form__publish-button-wrapper'><Button text={intl.formatMessage(messages.publish_without_community)} onClick={this.handleSubmitWithoutCommunity} disabled={unclickable} block secondary /></div>
+          <div className='compose-form__publish-button-wrapper'><Button text={intl.formatMessage(messages.publish_without_community)} onClick={this.handleSubmitWithoutCommunity} disabled={disabledButton} block secondary /></div>
         </div>
 
         <div>

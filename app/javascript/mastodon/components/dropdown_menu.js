@@ -8,6 +8,7 @@ import spring from 'react-motion/lib/spring';
 import detectPassiveEvents from 'detect-passive-events';
 
 const listenerOptions = detectPassiveEvents.hasSupport ? { passive: true } : false;
+let id = 0;
 
 class DropdownMenu extends React.PureComponent {
 
@@ -30,6 +31,10 @@ class DropdownMenu extends React.PureComponent {
     placement: 'bottom',
   };
 
+  state = {
+    mounted: false,
+  };
+
   handleDocumentClick = e => {
     if (this.node && !this.node.contains(e.target)) {
       this.props.onClose();
@@ -39,6 +44,7 @@ class DropdownMenu extends React.PureComponent {
   componentDidMount () {
     document.addEventListener('click', this.handleDocumentClick, false);
     document.addEventListener('touchend', this.handleDocumentClick, listenerOptions);
+    this.setState({ mounted: true });
   }
 
   componentWillUnmount () {
@@ -83,11 +89,15 @@ class DropdownMenu extends React.PureComponent {
 
   render () {
     const { items, style, placement, arrowOffsetLeft, arrowOffsetTop, dropdownMenuClassName } = this.props;
+    const { mounted } = this.state;
 
     return (
       <Motion defaultStyle={{ opacity: 0, scaleX: 0.85, scaleY: 0.75 }} style={{ opacity: spring(1, { damping: 35, stiffness: 400 }), scaleX: spring(1, { damping: 35, stiffness: 400 }), scaleY: spring(1, { damping: 35, stiffness: 400 }) }}>
         {({ opacity, scaleX, scaleY }) => (
-          <div className={`dropdown-menu ${dropdownMenuClassName}`} style={{ ...style, opacity: opacity, transform: `scale(${scaleX}, ${scaleY})` }} ref={this.setRef}>
+          // It should not be transformed when mounting because the resulting
+          // size will be used to determine the coordinate of the menu by
+          // react-overlays
+          <div className={`dropdown-menu ${dropdownMenuClassName}`} style={{ ...style, opacity: opacity, transform: mouted ? `scale(${scaleX}, ${scaleY})` : null }} ref={this.setRef}>
             <div className={`dropdown-menu__arrow ${placement}`} style={{ left: arrowOffsetLeft, top: arrowOffsetTop }} />
 
             <ul>
@@ -116,9 +126,11 @@ export default class Dropdown extends React.PureComponent {
     status: ImmutablePropTypes.map,
     isUserTouching: PropTypes.func,
     isModalOpen: PropTypes.bool.isRequired,
-    onModalOpen: PropTypes.func,
-    onModalClose: PropTypes.func,
     dropdownMenuClassName: PropTypes.string,
+    onOpen: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    dropdownPlacement: PropTypes.string,
+    openDropdownId: PropTypes.number,
   };
 
   static defaultProps = {
@@ -126,37 +138,28 @@ export default class Dropdown extends React.PureComponent {
   };
 
   state = {
-    expanded: false,
+    id: id++,
   };
 
-  handleClick = () => {
-    if (!this.state.expanded && this.props.isUserTouching() && this.props.onModalOpen) {
-      const { status, items } = this.props;
+  handleClick = ({ target }) => {
+    if (this.state.id === this.props.openDropdownId) {
+      this.handleClose();
+    } else {
+      const { top } = target.getBoundingClientRect();
+      const placement = top * 2 < innerHeight ? 'bottom' : 'top';
 
-      this.props.onModalOpen({
-        status,
-        actions: items,
-        onClick: this.handleItemClick,
-      });
-
-      return;
+      this.props.onOpen(this.state.id, this.handleItemClick, placement);
     }
-
-    this.setState({ expanded: !this.state.expanded });
   }
 
   handleClose = () => {
-    if (this.props.onModalClose) {
-      this.props.onModalClose();
-    }
-
-    this.setState({ expanded: false });
+    this.props.onClose(this.state.id);
   }
 
   handleKeyDown = e => {
     switch(e.key) {
     case 'Enter':
-      this.handleClick();
+      this.handleClick(e);
       break;
     case 'Escape':
       this.handleClose();
@@ -188,22 +191,22 @@ export default class Dropdown extends React.PureComponent {
   }
 
   render () {
-    const { icon, items, size, title, disabled, dropdownMenuClassName } = this.props;
-    const { expanded } = this.state;
+    const { icon, items, size, title, disabled, dropdownPlacement, openDropdownId, dropdownMenuClassName } = this.props;
+    const open = this.state.id === openDropdownId;
 
     return (
       <div onKeyDown={this.handleKeyDown}>
         <IconButton
           icon={icon}
           title={title}
-          active={expanded}
+          active={open}
           disabled={disabled}
           size={size}
           ref={this.setTargetRef}
           onClick={this.handleClick}
         />
 
-        <Overlay show={expanded} placement='bottom' target={this.findTarget}>
+        <Overlay show={open} placement={dropdownPlacement} target={this.findTarget}>
           <DropdownMenu items={items} onClose={this.handleClose} dropdownMenuClassName={dropdownMenuClassName} />
         </Overlay>
       </div>
