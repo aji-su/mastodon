@@ -7,6 +7,7 @@ import RelativeTimestamp from './relative_timestamp';
 import DisplayName from './display_name';
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
+import AttachmentList from './attachment_list';
 import { FormattedMessage } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { MediaGallery, Video } from '../features/ui/util/async-components';
@@ -36,15 +37,12 @@ export default class Status extends ImmutablePureComponent {
     onBlock: PropTypes.func,
     onEmbed: PropTypes.func,
     onHeightChange: PropTypes.func,
+    onToggleHidden: PropTypes.func,
     muted: PropTypes.bool,
     hidden: PropTypes.bool,
     onMoveUp: PropTypes.func,
     onMoveDown: PropTypes.func,
   };
-
-  state = {
-    isExpanded: false,
-  }
 
   // Avoid checking props that are functions (and whose equality will always
   // evaluate to false. See react-immutable-pure-component for usage.
@@ -54,8 +52,6 @@ export default class Status extends ImmutablePureComponent {
     'muted',
     'hidden',
   ]
-
-  updateOnStates = ['isExpanded']
 
   handleClick = () => {
     if (!this.context.router) {
@@ -75,7 +71,7 @@ export default class Status extends ImmutablePureComponent {
   }
 
   handleExpandedToggle = () => {
-    this.setState({ isExpanded: !this.state.isExpanded });
+    this.props.onToggleHidden(this._properStatus());
   };
 
   renderLoadingMediaGallery () {
@@ -139,7 +135,6 @@ export default class Status extends ImmutablePureComponent {
     let statusAvatar, prepend;
 
     const { hidden, featured } = this.props;
-    const { isExpanded } = this.state;
 
     let { status, account, ...other } = this.props;
 
@@ -177,9 +172,14 @@ export default class Status extends ImmutablePureComponent {
       status  = status.get('reblog');
     }
 
-    if (status.get('media_attachments').size > 0 && !this.props.muted) {
-      if (status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
-
+    if (status.get('media_attachments').size > 0) {
+      if (this.props.muted || status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
+        media = (
+          <AttachmentList
+            compact
+            media={status.get('media_attachments')}
+          />
+        );
       } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
         const video = status.getIn(['media_attachments', 0]);
 
@@ -242,7 +242,7 @@ export default class Status extends ImmutablePureComponent {
               </a>
             </div>
 
-            <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+            <StatusContent status={status} onClick={this.handleClick} expanded={!status.get('hidden')} onExpandedToggle={this.handleExpandedToggle} />
 
             {media}
 
