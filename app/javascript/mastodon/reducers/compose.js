@@ -177,7 +177,7 @@ const randomize = (state) => {
   });
 };
 
-const insertYomigana = (state, selectionStart, selectionEnd, text) => {
+const insertYomigana = (state, selectionStart, selectionEnd) => {
   return state.withMutations(map => {
     map.update('text', oldText => {
       const selection = oldText.slice(selectionStart, selectionEnd);

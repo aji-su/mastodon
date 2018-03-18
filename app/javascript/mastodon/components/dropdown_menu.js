@@ -97,7 +97,7 @@ class DropdownMenu extends React.PureComponent {
           // It should not be transformed when mounting because the resulting
           // size will be used to determine the coordinate of the menu by
           // react-overlays
-          <div className={`dropdown-menu ${dropdownMenuClassName}`} style={{ ...style, opacity: opacity, transform: mouted ? `scale(${scaleX}, ${scaleY})` : null }} ref={this.setRef}>
+          <div className={`dropdown-menu ${dropdownMenuClassName}`} style={{ ...style, opacity: opacity, transform: mounted ? `scale(${scaleX}, ${scaleY})` : null }} ref={this.setRef}>
             <div className={`dropdown-menu__arrow ${placement}`} style={{ left: arrowOffsetLeft, top: arrowOffsetTop }} />
 
             <ul>
