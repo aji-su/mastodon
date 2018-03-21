@@ -19,16 +19,16 @@ services:
     volumes:
       - ./redis:/data
 
-#  es:
-#    restart: always
-#    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.3
-#    environment:
-#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#    networks:
-#      - internal_network
-#### Uncomment to enable ES persistance
-#    volumes:
-#      - ./elasticsearch:/usr/share/elasticsearch/data
+  es:
+    restart: always
+    image: luckybeastakatheboss/docker-elasticsearch-kuromoji-neologd:6.2.3
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - internal_network
+### Uncomment to enable ES persistance
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
 
   web: &mastodon
     build: .
@@ -42,6 +42,7 @@ services:
     depends_on:
       - db
       - redis
+      - es
     volumes:
       - ./public/assets:/mastodon/public/assets
       - ./public/packs:/mastodon/public/packs
