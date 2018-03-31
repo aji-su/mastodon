@@ -326,7 +326,7 @@
         "id": "account.posts"
       },
       {
-        "defaultMessage": "Toots with replies",
+        "defaultMessage": "Toots and replies",
         "id": "account.posts_with_replies"
       },
       {
@@ -379,6 +379,10 @@
       {
         "defaultMessage": "Mention @{name}",
         "id": "account.mention"
+      },
+      {
+        "defaultMessage": "Direct message @{name}",
+        "id": "account.direct"
       },
       {
         "defaultMessage": "Edit profile",
@@ -804,6 +808,10 @@
       {
         "defaultMessage": "This toot won't be listed under any hashtag as it is unlisted. Only public toots can be searched by hashtag.",
         "id": "compose_form.hashtag_warning"
+      },
+      {
+        "defaultMessage": "This toot will only be visible to all the mentioned users.",
+        "id": "compose_form.direct_message_warning"
       }
     ],
     "path": "app/javascript/mastodon/features/compose/containers/warning_container.json"
@@ -1734,5 +1742,18 @@
       }
     ],
     "path": "app/javascript/mastodon/features/video/index.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "Oops!",
+        "id": "alert.unexpected.title"
+      },
+      {
+        "defaultMessage": "An unexpected error occurred.",
+        "id": "alert.unexpected.message"
+      }
+    ],
+    "path": "app/javascript/mastodon/middleware/errors.json"
   }
 ]
