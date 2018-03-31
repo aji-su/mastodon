@@ -80,29 +80,6 @@ function main() {
       ReactDOM.render(<CardContainer locale={locale} {...props} />, content);
     });
 
-    fetch('/api/v1/instance/activity').then(r => r.json()).then(activities => activities[0]).then(activity => {
-      const dateFormat = new Intl.DateTimeFormat(locale, {
-        month: 'long',
-        day: 'numeric',
-      });
-      const numberFormat = new Intl.NumberFormat(locale);
-      const week = new Date(parseInt(activity.week) * 1000);
-
-      [].forEach.call(document.querySelectorAll('.activity-count'), (content) => {
-        switch (content.id) {
-        case 'week':
-          content.innerHTML = dateFormat.format(week);
-          break;
-        case 'week-relative':
-          content.innerHTML = relativeFormat.format(week);
-          break;
-        default:
-          content.innerHTML = numberFormat.format(activity[content.id]);
-          break;
-        }
-      });
-    });
-
     const mediaGalleries = document.querySelectorAll('[data-component="MediaGallery"]');
 
     if (mediaGalleries.length > 0) {

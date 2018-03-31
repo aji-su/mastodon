@@ -36,26 +36,6 @@
           %span= t 'about.domain_count_after'
       = render 'contact', contact: @instance_presenter
 
-  .information-board
-    .container-alt.without-panel
-      .information-board__sections
-        .information-board__section.title
-          %span Latest weekly activities from
-          %strong.activity-count#week
-          %span.activity-count#week-relative
-        .information-board__section
-          %span= t 'about.status_count_before'
-          %strong.activity-count#statuses
-          %span= t 'about.status_count_after'
-        .information-board__section
-          %span ログイン数
-          %strong.activity-count#logins
-          %span= t 'about.user_count_after'
-        .information-board__section
-          %span 新規登録者数
-          %strong.activity-count#registrations
-          %span= t 'about.user_count_after'
-
   .extended-description
     .container-alt
       = @instance_presenter.site_extended_description.html_safe.presence || t('about.extended_description_html')
