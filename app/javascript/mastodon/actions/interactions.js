@@ -372,8 +372,12 @@ export function translateFail(error) {
 };
 
 export function decodeNaraku(status) {
+  const decodedStatus = {
+    ...status.toJS(),
+    content: status.get('content').replace(/:nrk([0-9a-f]+?):/g, (s, g) => `<ruby>:nrk${g}: <rt>${String.fromCodePoint(parseInt(g, 16))}</rt></ruby>`),
+  };
   return {
     type: DECODE_NARAKU,
-    status,
+    status: decodedStatus,
   };
 };

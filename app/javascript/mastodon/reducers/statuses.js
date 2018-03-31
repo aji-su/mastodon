@@ -30,15 +30,6 @@ const deleteStatus = (state, id, references) => {
   return state.delete(id);
 };
 
-const decodeNaraku = (state, status) => {
-  if (!status || status.get('content').match(/<ruby>/)) {
-    return state;
-  }
-  const decodedStatus = ImmutableMap(status)
-    .set('content', status.get('content').replace(/:nrk([0-9a-f]+?):/g, (s, g) => `<ruby>:nrk${g}: <rt>${String.fromCodePoint(parseInt(g, 16))}</rt></ruby>`));
-  return normalizeStatus(state, decodedStatus.toJS());
-};
-
 const initialState = ImmutableMap();
 
 export default function statuses(state = initialState, action) {
@@ -70,9 +61,9 @@ export default function statuses(state = initialState, action) {
   case TIMELINE_DELETE:
     return deleteStatus(state, action.id, action.references);
   case TRANSLATE_SUCCESS:
-    return normalizeStatus(state, action.status);
+    return state.update(action.status.id, ImmutableMap(), map => map.mergeDeep(fromJS(normalizeStatus(action.status))));
   case DECODE_NARAKU:
-    return decodeNaraku(state, action.status);
+    return state.update(action.status.id, ImmutableMap(), map => map.mergeDeep(fromJS(normalizeStatus(action.status))));
   default:
     return state;
   }
