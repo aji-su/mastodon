@@ -9,18 +9,12 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { connectPublicStream } from '../../../actions/streaming';
 
 const messages = defineMessages({
-  public: { id: 'standalone.public_title', defaultMessage: 'A look inside...' },
-  community: { id: 'standalone.community_title', defaultMessage: 'A look inside...' },
+  title: { id: 'standalone.public_title', defaultMessage: 'A look inside...' },
 });
 
 @connect()
 @injectIntl
 export default class PublicTimeline extends React.PureComponent {
-
-  constructor(props) {
-    super(props);
-    this.state = { isCommunity : true };
-  }
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -28,7 +22,6 @@ export default class PublicTimeline extends React.PureComponent {
   };
 
   handleHeaderClick = () => {
-    this.setState({ isCommunity : !this.state.isCommunity });
     this.column.scrollTop();
   }
 
@@ -61,7 +54,7 @@ export default class PublicTimeline extends React.PureComponent {
       <Column ref={this.setRef}>
         <ColumnHeader
           icon='globe'
-          title={intl.formatMessage(this.state.isCommunity ? messages.community : messages.public)}
+          title={intl.formatMessage(messages.title)}
           onClick={this.handleHeaderClick}
         />
 
