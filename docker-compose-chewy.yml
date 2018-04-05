@@ -1,0 +1,16 @@
+version: '2'
+services:
+
+  chewy: mastodon
+    image: luckybeastakatheboss/mastodon
+    restart: no
+    env_file: .env.production
+    mem_limit: 256m
+    command: bundle exec rails chewy:deploy
+    volumes:
+      - ./public/assets:/mastodon/public/assets
+      - ./public/packs:/mastodon/public/packs
+      - ./public/system:/mastodon/public/system
+
+# command:
+# docker-compose -f docker-compose-chewy.yml up
