@@ -6,6 +6,12 @@ class StatusesIndex < Chewy::Index
       content: {
         type: 'custom',
         tokenizer: 'kuromoji_neologd_tokenizer',
+        filter: %w(
+          kuromoji_neologd_baseform
+          kuromoji_neologd_stemmer
+          cjk_width
+          lowercase
+        ),
       },
     },
   }
