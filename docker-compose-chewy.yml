@@ -1,9 +1,9 @@
 version: '2'
 services:
 
-  chewy: mastodon
+  chewy:
     image: luckybeastakatheboss/mastodon
-    restart: no
+    restart: 'no'
     env_file: .env.production
     mem_limit: 256m
     command: bundle exec rails chewy:deploy
