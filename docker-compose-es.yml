@@ -3,7 +3,7 @@ services:
 
   es:
     restart: always
-    image: luckybeastakatheboss/docker-elasticsearch-kuromoji-neologd:6.2.3
+    image: luckybeastakatheboss/docker-elasticsearch-kuromoji-neologd:latest
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     networks:
