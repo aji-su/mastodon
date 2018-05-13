@@ -59,8 +59,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(uploadCompose(files));
   },
 
-  onPickEmoji (position, data) {
-    dispatch(insertEmojiCompose(position, data));
+  onPickEmoji (position, data, needsSpace) {
+    dispatch(insertEmojiCompose(position, data, needsSpace));
   },
 
   onTranslate (text, lang) {
