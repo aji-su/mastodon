@@ -771,7 +771,6 @@ en:
   themes:
     default: Mastodon
     naraku: Naraku
-    broken: Broken
   time:
     formats:
       default: "%b %d, %Y, %H:%M"
