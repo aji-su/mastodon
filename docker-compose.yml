@@ -18,6 +18,10 @@ services:
 ### Uncomment to enable REDIS persistance
     volumes:
       - ./redis:/data
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 #  es:
 #    restart: always
@@ -47,6 +51,10 @@ services:
       - ./public/assets:/mastodon/public/assets
       - ./public/packs:/mastodon/public/packs
       - ./public/system:/mastodon/public/system
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   streaming:
     <<: *mastodon
@@ -88,6 +96,10 @@ services:
       - ./nginx-conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
       - ./nginx-conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
       - ./public:/var/lib/mastodon/public
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
   external_network:
