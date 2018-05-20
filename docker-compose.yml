@@ -19,9 +19,10 @@ services:
     volumes:
       - ./redis:/data
     logging:
+      driver: fluentd
       options:
-        max-size: "10m"
-        max-file: "3"
+        fluentd-address: "172.16.1.1:24224"
+        tag: "docker.{{.Name}}"
 
 #  es:
 #    restart: always
@@ -52,9 +53,10 @@ services:
       - ./public/packs:/mastodon/public/packs
       - ./public/system:/mastodon/public/system
     logging:
+      driver: fluentd
       options:
-        max-size: "10m"
-        max-file: "3"
+        fluentd-address: "172.16.1.1:24224"
+        tag: "docker.{{.Name}}"
 
   streaming:
     <<: *mastodon
@@ -63,20 +65,26 @@ services:
   sidekiq_default:
     <<: *mastodon
     environment:
-      - DB_POOL=20
-    command: bundle exec sidekiq -c 20 -q default
+      - DB_POOL=50
+    command: bundle exec sidekiq -c 50 -q default
 
-  sidekiq_push_and_pull:
+  sidekiq_push:
     <<: *mastodon
     environment:
-      - DB_POOL=20
-    command: bundle exec sidekiq -c 20 -q push -q pull
+      - DB_POOL=5
+    command: bundle exec sidekiq -c 5 -q push
+
+  sidekiq_pull:
+    <<: *mastodon
+    environment:
+      - DB_POOL=5
+    command: bundle exec sidekiq -c 5 -q pull
 
   sidekiq_mailers:
     <<: *mastodon
     environment:
-      - DB_POOL=5
-    command: bundle exec sidekiq -c 5 -q mailers
+      - DB_POOL=1
+    command: bundle exec sidekiq -c 1 -q mailers
 
   https-portal:
     image: steveltn/https-portal:1
@@ -97,9 +105,10 @@ services:
       - ./nginx-conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
       - ./public:/var/lib/mastodon/public
     logging:
+      driver: fluentd
       options:
-        max-size: "10m"
-        max-file: "3"
+        fluentd-address: "172.16.1.1:24224"
+        tag: "docker.{{.Name}}"
 
 networks:
   external_network:
