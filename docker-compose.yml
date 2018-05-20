@@ -1,14 +1,19 @@
 version: '3'
 services:
 
-#  db:
-#    restart: always
-#    image: postgres:9.6-alpine
-#    networks:
-#      - internal_network
-#### Uncomment to enable DB persistance
-#    volumes:
-#      - ./postgres:/var/lib/postgresql/data
+  db:
+    restart: always
+    image: postgres:9.6-alpine
+    networks:
+      - internal_network
+### Uncomment to enable DB persistance
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "172.16.1.1:24224"
+        tag: "docker.{{.Name}}"
 
   redis:
     restart: always
@@ -45,7 +50,7 @@ services:
       - external_network
       - internal_network
     depends_on:
-#      - db
+      - db
       - redis
 #      - es
     volumes:
