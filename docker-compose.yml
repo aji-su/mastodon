@@ -9,6 +9,8 @@ services:
 ### Uncomment to enable DB persistance
     volumes:
       - ./postgres:/var/lib/postgresql/data
+      - ./postgres_conf/postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     logging:
       driver: fluentd
       options:
@@ -70,8 +72,8 @@ services:
   sidekiq_default:
     <<: *mastodon
     environment:
-      - DB_POOL=50
-    command: bundle exec sidekiq -c 50 -q default
+      - DB_POOL=10
+    command: bundle exec sidekiq -c 10 -q default
 
   sidekiq_push:
     <<: *mastodon
