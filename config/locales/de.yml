@@ -40,6 +40,7 @@ de:
     following: Folgt
     media: Medien
     moved_html: "%{name} ist auf %{new_profile_link} umgezogen:"
+    network_hidden: Diese Informationen sind nicht verfügbar
     nothing_here: Hier gibt es nichts!
     people_followed_by: Profile, denen %{name} folgt
     people_who_follow: Profile, die %{name} folgen
@@ -594,20 +595,6 @@ de:
     other: Weiteres
     publishing: Beiträge
     web: Web
-  push_notifications:
-    favourite:
-      title: "%{name} hat deinen Beitrag favorisiert"
-    follow:
-      title: "%{name} folgt dir nun"
-    group:
-      title: "%{count} Benachrichtigungen"
-    mention:
-      action_boost: Teilen
-      action_expand: Mehr anzeigen
-      action_favourite: Favorisieren
-      title: "%{name} hat dich erwähnt"
-    reblog:
-      title: "%{name} hat deinen Beitrag geteilt"
   remote_follow:
     acct: Profilname@Domain, von wo aus du dieser Person folgen möchtest
     missing_resource: Die erforderliche Weiterleitungs-URL für dein Konto konnte nicht gefunden werden

@@ -48,6 +48,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     privacy: PropTypes.string,
     spoiler_text: PropTypes.string,
     focusDate: PropTypes.instanceOf(Date),
+    caretPosition: PropTypes.number,
     preselectDate: PropTypes.instanceOf(Date),
     is_submitting: PropTypes.bool,
     is_uploading: PropTypes.bool,
@@ -112,7 +113,6 @@ export default class ComposeForm extends ImmutablePureComponent {
   }
 
   onSuggestionSelected = (tokenStart, token, value) => {
-    this._restoreCaret = null;
     this.props.onSuggestionSelected(tokenStart, token, value);
   }
 
@@ -120,31 +120,21 @@ export default class ComposeForm extends ImmutablePureComponent {
     this.props.onChangeSpoilerText(e.target.value);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // If this is the update where we've finished uploading,
-    // save the last caret position so we can restore it below!
-    if (!nextProps.is_uploading && this.props.is_uploading) {
-      this._restoreCaret = this.autosuggestTextarea.textarea.selectionStart;
-    }
-  }
-
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     // This statement does several things:
     // - If we're beginning a reply, and,
     //     - Replying to zero or one users, places the cursor at the end of the textbox.
     //     - Replying to more than one user, selects any usernames past the first;
     //       this provides a convenient shortcut to drop everyone else from the conversation.
-    // - If we've just finished uploading an image, and have a saved caret position,
-    //   restores the cursor to that position after the text changes!
-    if (this.props.focusDate !== prevProps.focusDate || (prevProps.is_uploading && !this.props.is_uploading && typeof this._restoreCaret === 'number')) {
+    if (this.props.focusDate !== prevProps.focusDate) {
       let selectionEnd, selectionStart;
 
       if (this.props.preselectDate !== prevProps.preselectDate) {
         selectionEnd = this.props.text.length;
         selectionStart = this.props.text.search(/\s/) + 1;
-      } else if (typeof this._restoreCaret === 'number') {
-        selectionStart = this._restoreCaret;
-        selectionEnd = this._restoreCaret;
+      } else if (typeof this.props.caretPosition === 'number') {
+        selectionStart = this.props.caretPosition;
+        selectionEnd   = this.props.caretPosition;
       } else {
         selectionEnd = this.props.text.length;
         selectionStart = selectionEnd;
@@ -164,10 +154,8 @@ export default class ComposeForm extends ImmutablePureComponent {
   handleEmojiPick = (data) => {
     const { text }     = this.props;
     const position     = this.autosuggestTextarea.textarea.selectionStart;
-    const emojiChar    = data.native;
     const needsSpace   = data.custom && position > 0 && !allowedAroundShortCode.includes(text[position - 1]);
 
-    this._restoreCaret = position + emojiChar.length + 1 + (needsSpace ? 1 : 0);
     this.props.onPickEmoji(position, data, needsSpace);
   }
 
