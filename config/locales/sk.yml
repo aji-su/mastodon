@@ -50,6 +50,7 @@ sk:
     reserved_username: Prihlasovacie meno je rezervované
     roles:
       admin: Administrátor
+      bot: Automat
       moderator: Moderátor
     unfollow: Prestať sledovať
   admin:
@@ -424,7 +425,7 @@ sk:
     following: 'Podarilo sa! Teraz už následujete užívateľa:'
     post_follow:
       close: Alebo môžete iba zatvoriť toto okno.
-      return: Vrátiť sa na užívateľov profil
+      return: Ukáž užívateľov profil
       web: Ísť na web
     title: Následovať %{acct}
   datetime:

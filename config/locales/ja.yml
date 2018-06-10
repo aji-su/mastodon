@@ -782,6 +782,7 @@ ja:
   themes:
     contrast: ハイコントラスト
     default: Mastodon
+    mastodon-light: Mastodon (ライト)
     naraku: 奈落文字
   time:
     formats:
