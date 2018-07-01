@@ -42,6 +42,7 @@ export const DECODE_NARAKU = 'DECODE_NARAKU';
 export function reblog(status) {
   return function (dispatch, getState) {
     dispatch(reblogRequest(status));
+
     api(getState).post(`/api/v1/statuses/${status.get('id')}/reblog`).then(function (response) {
       // The reblog API method returns a new status wrapped around the original. In this case we are only
       // interested in how the original is modified, hence passing it skipping the wrapper
