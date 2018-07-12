@@ -124,7 +124,7 @@ export function submitCompose(withCommunity) {
       return;
     }
 
-    const { visibility, hasDefaultHashtag } = handleDefaultTag(
+    const { newStatus, visibility, hasDefaultHashtag } = handleDefaultTag(
       withCommunity,
       status,
       getState().getIn(['compose', 'privacy']),
@@ -135,7 +135,7 @@ export function submitCompose(withCommunity) {
     dispatch(submitComposeRequest());
 
     api(getState).post('/api/v1/statuses', {
-      status,
+      status: newStatus,
       in_reply_to_id: getState().getIn(['compose', 'in_reply_to'], null),
       media_ids: media.map(item => item.get('id')),
       sensitive: getState().getIn(['compose', 'sensitive']),
@@ -185,11 +185,11 @@ const handleDefaultTag = (withCommunity, status, visibility, in_reply_to) => {
     // if has default hashtag: keep
     // else if public && non-reply: add default hashtag
     return hasDefaultHashtag ? {
-      status,
+      newStatus: status,
       visibility,
       hasDefaultHashtag: true,
     } : {
-      status: isPublic && !in_reply_to ? `${status} #${process.env.DEFAULT_HASHTAG}` : status,
+      newStatus: isPublic && !in_reply_to ? `${status} #${process.env.DEFAULT_HASHTAG}` : status,
       visibility,
       hasDefaultHashtag: true,
     };
@@ -199,11 +199,11 @@ const handleDefaultTag = (withCommunity, status, visibility, in_reply_to) => {
     // if has hashtag: keep
     // else if public: change visibility to unlisted
     return hasHashtags ? {
-      status,
+      newStatus: status,
       visibility,
       hasDefaultHashtag: false,
     } : {
-      status,
+      newStatus: status,
       visibility: isPublic ? 'unlisted' : visibility,
       hasDefaultHashtag: false,
     };
