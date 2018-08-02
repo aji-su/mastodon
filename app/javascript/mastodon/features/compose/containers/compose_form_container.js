@@ -11,7 +11,7 @@ import {
   insertEmojiCompose,
   translate,
   randomize,
-  insertYomigana,
+  insertFurigana,
 } from '../../../actions/compose';
 
 const mapStateToProps = state => ({
@@ -72,8 +72,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(randomize(text));
   },
 
-  onInsertYomigana (selectionStart, selectionEnd, text) {
-    dispatch(insertYomigana(selectionStart, selectionEnd, text));
+  onInsertFurigana (selectionStart, selectionEnd, text) {
+    dispatch(insertFurigana(selectionStart, selectionEnd, text));
   },
 
 });

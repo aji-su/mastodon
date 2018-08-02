@@ -27,7 +27,7 @@ import {
   COMPOSE_EMOJI_INSERT,
   COMPOSE_TRANSLATE_SUCCESS,
   COMPOSE_RANDOMIZE,
-  COMPOSE_YOMIGANA_INSERT,
+  COMPOSE_FURIGANA_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
   COMPOSE_UPLOAD_CHANGE_SUCCESS,
   COMPOSE_UPLOAD_CHANGE_FAIL,
@@ -179,7 +179,7 @@ const randomize = (state) => {
   });
 };
 
-const insertYomigana = (state, selectionStart, selectionEnd) => {
+const insertFurigana = (state, selectionStart, selectionEnd) => {
   return state.withMutations(map => {
     map.update('text', oldText => {
       const selection = oldText.slice(selectionStart, selectionEnd);
@@ -342,8 +342,8 @@ export default function compose(state = initialState, action) {
     return translate(state, action.text);
   case COMPOSE_RANDOMIZE:
     return randomize(state, action.text);
-  case COMPOSE_YOMIGANA_INSERT:
-    return insertYomigana(state, action.selectionStart, action.selectionEnd, action.text);
+  case COMPOSE_FURIGANA_INSERT:
+    return insertFurigana(state, action.selectionStart, action.selectionEnd, action.text);
   case COMPOSE_UPLOAD_CHANGE_SUCCESS:
     return state
       .set('is_submitting', false)

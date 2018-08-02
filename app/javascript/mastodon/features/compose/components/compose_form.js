@@ -59,7 +59,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     onChangeSpoilerText: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
     onPickEmoji: PropTypes.func.isRequired,
-    onInsertYomigana: PropTypes.func.isRequired,
+    onInsertFurigana: PropTypes.func.isRequired,
     showSearch: PropTypes.bool,
     anyMedia: PropTypes.bool,
   };
@@ -176,11 +176,11 @@ export default class ComposeForm extends ImmutablePureComponent {
     this.props.onRandomize(this.autosuggestTextarea.textarea.value);
   }
 
-  handleYomiganaClick = () => {
+  handleFuriganaClick = () => {
     const selectionStart = this.autosuggestTextarea.textarea.selectionStart;
     const selectionEnd = this.autosuggestTextarea.textarea.selectionEnd;
     const text = this.autosuggestTextarea.textarea.value;
-    this.props.onInsertYomigana(selectionStart, selectionEnd, text);
+    this.props.onInsertFurigana(selectionStart, selectionEnd, text);
   }
 
   handleNarakuClick() {
@@ -273,7 +273,7 @@ export default class ComposeForm extends ImmutablePureComponent {
 
         <div>
           <Button text='Randomize with Regex' onClick={this.handleRandomizeClick} block style={{ marginTop: '10px' }} />
-          <Button text='読み仮名を挿入' onClick={this.handleYomiganaClick} block style={{ marginTop: '10px' }} />
+          <Button text='振り仮名を挿入' onClick={this.handleFuriganaClick} block style={{ marginTop: '10px' }} />
           <Button text='奈落文字に変換する' onClick={this.handleNarakuClick} block style={{ marginTop: '10px' }} />
           <Button text='絵文字でお絵かきツールを開く' onClick={this.handleOekakiClick} block style={{ marginTop: '10px' }} />
         </div>
