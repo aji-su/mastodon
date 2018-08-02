@@ -471,7 +471,7 @@ const startWorker = (workerId) => {
     const defaultTag = process.env.DEFAULT_HASHTAG.toLowerCase();
 
     const onlyMedia = req.query.only_media === '1' || req.query.only_media === 'true';
-    const channel   = onlyMedia ? `timeline:hastag:${defaultTag}:media` : `timeline:hashtag:${defaultTag}`;
+    const channel   = onlyMedia ? `timeline:hashtag:${defaultTag}:media` : `timeline:hashtag:${defaultTag}`;
 
     streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
