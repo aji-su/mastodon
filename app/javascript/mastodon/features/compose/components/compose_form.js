@@ -33,6 +33,10 @@ const messages = defineMessages({
   publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
   translate: { id: 'status.translate', defaultMessage: 'Translate' },
   publish_without_community: { id: 'compose_form.publish_without_community', defaultMessage: 'Toot without Local' },
+  edit_menu: { id: 'compose_form.edit_menu', defaultMessage: 'Edit menu' },
+  randomize_with_regex: { id: 'compose_form.randomize_with_regex', defaultMessage: 'Randomize with Regex' },
+  add_furigana: { id: 'compose_form.add_furigana', defaultMessage: 'Add furigana' },
+  open_oekaki_app: { id: 'compose_form.open_oekaki_app', defaultMessage: 'Open oekaki app' },
 });
 
 @injectIntl
@@ -185,7 +189,6 @@ export default class ComposeForm extends ImmutablePureComponent {
 
   handleOekakiClick() {
     window.open('https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/#theboss.tech');
-    return false;
   }
 
   render () {
@@ -203,6 +206,12 @@ export default class ComposeForm extends ImmutablePureComponent {
 
     const langMenu = [];
     Object.keys(TRANSLATE_LANGS).map(langCode => langMenu.push({ text: `${langCode} : ${TRANSLATE_LANGS[langCode]}`, action: () => this.handleTranslate(langCode) }));
+
+    const editMenu = [
+      { text: intl.formatMessage(messages.randomize_with_regex), action: this.handleRandomizeClick },
+      { text: intl.formatMessage(messages.add_furigana), action: this.handleFuriganaClick },
+      { text: intl.formatMessage(messages.open_oekaki_app), action: this.handleOekakiClick },
+    ];
 
     return (
       <div className='compose-form'>
@@ -247,6 +256,7 @@ export default class ComposeForm extends ImmutablePureComponent {
             <SensitiveButtonContainer />
             <SpoilerButtonContainer />
             <DropdownMenuContainer items={langMenu} icon='language' size={18} direction='right' title={intl.formatMessage(messages.translate)} dropdownMenuClassName='scrollableDropdownMenu' />
+            <DropdownMenuContainer items={editMenu} icon='pencil' size={18} direction='right' title={intl.formatMessage(messages.edit_menu)} />
           </div>
           <div className='character-counter__wrapper'><CharacterCounter max={1000} text={text} /></div>
         </div>
@@ -257,12 +267,6 @@ export default class ComposeForm extends ImmutablePureComponent {
 
         <div className='compose-form__publish'>
           <div className='compose-form__publish-button-wrapper'><Button text={intl.formatMessage(messages.publish_without_community)} onClick={this.handleSubmitWithoutCommunity} disabled={disabledButton} block secondary /></div>
-        </div>
-
-        <div>
-          <Button text='Randomize with Regex' onClick={this.handleRandomizeClick} block style={{ marginTop: '10px' }} />
-          <Button text='振り仮名を挿入' onClick={this.handleFuriganaClick} block style={{ marginTop: '10px' }} />
-          <Button text='絵文字でお絵かきツールを開く' onClick={this.handleOekakiClick} block style={{ marginTop: '10px' }} />
         </div>
       </div>
     );
