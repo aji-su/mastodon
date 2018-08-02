@@ -213,8 +213,8 @@ export default class ComposeForm extends ImmutablePureComponent {
       publishText = this.props.privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
     }
 
-    const menu = [];
-    Object.keys(TRANSLATE_LANGS).map(langCode => menu.push({ text: `${langCode} : ${TRANSLATE_LANGS[langCode]}`, action: () => this.handleTranslate(langCode) }));
+    const langMenu = [];
+    Object.keys(TRANSLATE_LANGS).map(langCode => langMenu.push({ text: `${langCode} : ${TRANSLATE_LANGS[langCode]}`, action: () => this.handleTranslate(langCode) }));
 
     return (
       <div className='compose-form'>
@@ -258,7 +258,7 @@ export default class ComposeForm extends ImmutablePureComponent {
             <PrivacyDropdownContainer />
             <SensitiveButtonContainer />
             <SpoilerButtonContainer />
-            <DropdownMenuContainer items={menu} icon='language' size={18} direction='right' title={intl.formatMessage(messages.translate)} dropdownMenuClassName='scrollableDropdownMenu' />
+            <DropdownMenuContainer items={langMenu} icon='language' size={18} direction='right' title={intl.formatMessage(messages.translate)} dropdownMenuClassName='scrollableDropdownMenu' />
           </div>
           <div className='character-counter__wrapper'><CharacterCounter max={1000} text={text} /></div>
         </div>
