@@ -2,16 +2,38 @@
 
 class StatusesIndex < Chewy::Index
   settings index: { refresh_interval: '15m' }, analysis: {
+    filter: {
+      english_stemmer: {
+        type: 'stemmer',
+        language: 'english',
+      },
+      english_possessive_stemmer: {
+        type: 'stemmer',
+        language: 'possessive_english',
+      },
+    },
+    tokenizer: {
+      ja_tokenizer: {
+        type: 'kuromoji_neologd_tokenizer',
+        mode: 'search'
+      },
+    },
     analyzer: {
       content: {
+        tokenizer: 'ja_tokenizer',
         type: 'custom',
-        tokenizer: 'kuromoji_neologd_tokenizer',
-        filter: %w(
-          kuromoji_neologd_baseform
-          kuromoji_neologd_stemmer
-          cjk_width
-          lowercase
+        char_filter: %w(
+          icu_normalizer
         ),
+        filter: %w(
+          kuromoji_neologd_stemmer
+          kuromoji_neologd_part_of_speech
+          english_possessive_stemmer
+          english_stemmer
+        ),
+      },
+      ja_default_analyzer: {
+        tokenizer: 'kuromoji_neologd_tokenizer',
       },
     },
   }
@@ -35,7 +57,7 @@ class StatusesIndex < Chewy::Index
     root date_detection: false do
       field :account_id, type: 'long'
 
-      field :text, type: 'text', value: ->(status) { [status.spoiler_text, Formatter.instance.plaintext(status)].join("\n\n") } do
+      field :text, type: 'text', analyzer: 'ja_default_analyzer', value: ->(status) { [status.spoiler_text, Formatter.instance.plaintext(status)].join("\n\n") } do
         field :stemmed, type: 'text', analyzer: 'content'
       end
 

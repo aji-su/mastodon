@@ -27,3 +27,10 @@ docker-compose -f docker-compose-masi.yml run --rm web rake assets:precompile
 # up
 docker-compose -f docker-compose-masi.yml up -d --remove-orphans
 ```
+
+# es
+
+```bash
+sudo chown mastodon:mastodon ./elasticsearch
+sudo sysctl -w vm.max_map_count=262144
+```
