@@ -228,6 +228,12 @@ export default class Dropdown extends React.PureComponent {
     return this.target;
   }
 
+  componentWillUnmount = () => {
+    if (this.state.id === this.props.openDropdownId) {
+      this.handleClose();
+    }
+  }
+
   render () {
     const { icon, items, size, title, disabled, dropdownPlacement, openDropdownId, dropdownMenuClassName } = this.props;
     const open = this.state.id === openDropdownId;
