@@ -21,9 +21,9 @@ services:
 
   es:
     restart: always
-    image: luckybeastakatheboss/docker-elasticsearch-kuromoji-neologd:6.2.3
+    image: luckybeastakatheboss/docker-elasticsearch-kuromoji-neologd
     environment:
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "ES_JAVA_OPTS=-Xms8g -Xmx8g"
     networks:
       - internal_network
 ### Uncomment to enable ES persistance
