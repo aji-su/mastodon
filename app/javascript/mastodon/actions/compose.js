@@ -118,15 +118,15 @@ export function directCompose(account, router) {
 
 export function submitCompose(withCommunity) {
   return function (dispatch, getState) {
-    const status = getState().getIn(['compose', 'text'], '');	
+    const rawStatus = getState().getIn(['compose', 'text'], '');
     const media = getState().getIn(['compose', 'media_attachments']);
-    if ((!status || !status.length) && media.size === 0) {
+    if ((!rawStatus || !rawStatus.length) && media.size === 0) {
       return;
     }
 
-    const { newStatus, visibility, hasDefaultHashtag } = handleDefaultTag(
+    const { status, visibility, hasDefaultHashtag } = handleDefaultTag(
       withCommunity,
-      status,
+      rawStatus,
       getState().getIn(['compose', 'privacy']),
       getState().getIn(['compose', 'in_reply_to']),
       media,
@@ -135,7 +135,7 @@ export function submitCompose(withCommunity) {
     dispatch(submitComposeRequest());
 
     api(getState).post('/api/v1/statuses', {
-      status: newStatus,
+      status,
       in_reply_to_id: getState().getIn(['compose', 'in_reply_to'], null),
       media_ids: media.map(item => item.get('id')),
       sensitive: getState().getIn(['compose', 'sensitive']),
@@ -185,11 +185,11 @@ const handleDefaultTag = (withCommunity, status, visibility, in_reply_to) => {
     // if has default hashtag: keep
     // else if public && non-reply: add default hashtag
     return hasDefaultHashtag ? {
-      newStatus: status,
+      status,
       visibility,
       hasDefaultHashtag: true,
     } : {
-      newStatus: isPublic && !in_reply_to ? `${status} #${process.env.DEFAULT_HASHTAG}` : status,
+      status: isPublic && !in_reply_to ? `${status} #${process.env.DEFAULT_HASHTAG}` : status,
       visibility,
       hasDefaultHashtag: true,
     };
@@ -199,11 +199,11 @@ const handleDefaultTag = (withCommunity, status, visibility, in_reply_to) => {
     // if has hashtag: keep
     // else if public: change visibility to unlisted
     return hasHashtags ? {
-      newStatus: status,
+      status,
       visibility,
       hasDefaultHashtag: false,
     } : {
-      newStatus: status,
+      status,
       visibility: isPublic ? 'unlisted' : visibility,
       hasDefaultHashtag: false,
     };
