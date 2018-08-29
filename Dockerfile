@@ -34,7 +34,6 @@ RUN apk -U upgrade \
     postgresql-dev \
     protobuf-dev \
     python \
-    libc6-compat \
  && apk add \
     ca-certificates \
     ffmpeg \

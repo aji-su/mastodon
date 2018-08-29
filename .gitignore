@@ -23,7 +23,6 @@ public/packs
 public/packs-test
 .env
 .env.production
-.env.production.masi
 node_modules/
 build/
 
@@ -41,9 +40,6 @@ config/deploy/*
 postgres
 redis
 elasticsearch
-
-/ssl_certs/*
-!/ssl_certs/.gitkeep
 
 # Ignore Apple files
 .DS_Store

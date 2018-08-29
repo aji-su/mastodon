@@ -13,5 +13,3 @@ vendor/bundle
 postgres
 redis
 elasticsearch
-ssl_certs
-nginx-conf
