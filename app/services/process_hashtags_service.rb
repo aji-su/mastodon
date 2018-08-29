@@ -2,7 +2,7 @@
 
 class ProcessHashtagsService < BaseService
   def call(status, tags = [])
-    if status.local? then
+    if status.local?
       tags = Extractor.extract_hashtags(status.text)
 
       if Rails.configuration.x.default_hashtag.present? && tags.empty? && status.visibility == 'public' && !status.reply? then
