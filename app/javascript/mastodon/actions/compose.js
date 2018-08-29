@@ -129,7 +129,6 @@ export function submitCompose(withCommunity) {
       rawStatus,
       getState().getIn(['compose', 'privacy']),
       getState().getIn(['compose', 'in_reply_to']),
-      media,
     );
 
     dispatch(submitComposeRequest());
