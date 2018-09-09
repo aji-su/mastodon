@@ -51,6 +51,7 @@ export const COMPOSE_TRANSLATE_REQUEST = 'COMPOSE_TRANSLATE_REQUEST';
 export const COMPOSE_TRANSLATE_SUCCESS = 'COMPOSE_TRANSLATE_SUCCESS';
 export const COMPOSE_TRANSLATE_FAIL = 'COMPOSE_TRANSLATE_FAIL';
 
+export const COMPOSE_DAKUONIZE = 'COMPOSE_DAKUONIZE';
 export const COMPOSE_RANDOMIZE = 'COMPOSE_RANDOMIZE';
 export const COMPOSE_FURIGANA_INSERT = 'COMPOSE_FURIGANA_INSERT';
 
@@ -555,6 +556,12 @@ export function translateFail(error) {
     error,
   };
 };
+
+export function dakuonize() {
+  return {
+    type: COMPOSE_DAKUONIZE,
+  };
+}
 
 export function randomize(text) {
   return {

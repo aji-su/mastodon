@@ -26,6 +26,7 @@ import {
   COMPOSE_COMPOSING_CHANGE,
   COMPOSE_EMOJI_INSERT,
   COMPOSE_TRANSLATE_SUCCESS,
+  COMPOSE_DAKUONIZE,
   COMPOSE_RANDOMIZE,
   COMPOSE_FURIGANA_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
@@ -158,6 +159,18 @@ const insertEmoji = (state, position, emojiData, needsSpace) => {
 const translate = (state, text) => {
   return state.withMutations(map => {
     map.update('text', oldText => oldText + '\n ' + text);
+    map.set('focusDate', new Date());
+    map.set('idempotencyKey', uuid());
+  });
+};
+
+const dakuonize = (state) => {
+  return state.withMutations(map => {
+    map.update('text', text => {
+      const chars = Array.from(text);
+      const converted = chars.map(char => /[\r\n]/.test(char) ? char : (char + '\u309b'));
+      return converted.join('');
+    });
     map.set('focusDate', new Date());
     map.set('idempotencyKey', uuid());
   });
@@ -340,6 +353,8 @@ export default function compose(state = initialState, action) {
     return insertEmoji(state, action.position, action.emoji, action.needsSpace);
   case COMPOSE_TRANSLATE_SUCCESS:
     return translate(state, action.text);
+  case COMPOSE_DAKUONIZE:
+    return dakuonize(state);
   case COMPOSE_RANDOMIZE:
     return randomize(state, action.text);
   case COMPOSE_FURIGANA_INSERT:

@@ -9,6 +9,7 @@ import {
   selectComposeSuggestion,
   changeComposeSpoilerText,
   insertEmojiCompose,
+  dakuonize,
   translate,
   randomize,
   insertFurigana,
@@ -66,6 +67,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onTranslate (text, lang) {
     dispatch(translate(text, lang));
+  },
+
+  onDakuonize () {
+    dispatch(dakuonize());
   },
 
   onRandomize (text) {

@@ -35,6 +35,7 @@ const messages = defineMessages({
   publish_with_default_tag: { id: 'compose_form.publish_with_default_tag', defaultMessage: 'Toot with default-tag' },
   publish_without_community: { id: 'compose_form.publish_without_community', defaultMessage: 'Toot without Local' },
   edit_menu: { id: 'compose_form.edit_menu', defaultMessage: 'Edit menu' },
+  dakuonize: { id: 'compose_form.dakuonize', defaultMessage: 'Dakuonize' },
   randomize_with_regex: { id: 'compose_form.randomize_with_regex', defaultMessage: 'Randomize with Regex' },
   add_furigana: { id: 'compose_form.add_furigana', defaultMessage: 'Add furigana' },
   open_oekaki_app: { id: 'compose_form.open_oekaki_app', defaultMessage: 'Open oekaki app' },
@@ -176,6 +177,10 @@ export default class ComposeForm extends ImmutablePureComponent {
     this.props.onTranslate(this.autosuggestTextarea.textarea.value, lang);
   }
 
+  handleDakuonize = () => {
+    this.props.onDakuonize();
+  }
+
   handleRandomizeClick = () => {
     this.props.onRandomize(this.autosuggestTextarea.textarea.value);
   }
@@ -210,6 +215,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     Object.keys(TRANSLATE_LANGS).map(langCode => langMenu.push({ text: `${langCode} : ${TRANSLATE_LANGS[langCode]}`, action: () => this.handleTranslate(langCode) }));
 
     const editMenu = [
+      { text: intl.formatMessage(messages.dakuonize), action: this.handleDakuonize },
       { text: intl.formatMessage(messages.randomize_with_regex), action: this.handleRandomizeClick },
       { text: intl.formatMessage(messages.add_furigana), action: this.handleFuriganaClick },
       { text: intl.formatMessage(messages.open_oekaki_app), action: this.handleOekakiClick },

@@ -80,6 +80,7 @@
   "compose_form.spoiler.unmarked": "閲覧注意が設定されていません",
   "compose_form.spoiler_placeholder": "ここに警告を書いてください",
   "compose_form.edit_menu": "編集メニュー",
+  "compose_form.dakuonize": "Dakuonize",
   "compose_form.randomize_with_regex": "Randomize with Regex",
   "compose_form.add_furigana": "振り仮名を追加",
   "compose_form.open_oekaki_app": "絵文字でお絵かきツールを開く",
