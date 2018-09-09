@@ -27,6 +27,7 @@ import {
   COMPOSE_EMOJI_INSERT,
   COMPOSE_TRANSLATE_SUCCESS,
   COMPOSE_DAKUONIZE,
+  COMPOSE_GLITCH,
   COMPOSE_RANDOMIZE,
   COMPOSE_FURIGANA_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
@@ -43,6 +44,9 @@ import { me } from '../initial_state';
 import { unescapeHTML } from '../utils/html';
 
 import { String_random } from 'string_random.js';
+import creepify from 'lunicode-creepify';
+
+creepify.options.maxHeight = 5;
 
 const initialState = ImmutableMap({
   mounted: 0,
@@ -173,6 +177,18 @@ const dakuonize = (state) => {
     });
     map.set('focusDate', new Date());
     map.set('idempotencyKey', uuid());
+  });
+};
+
+const glitch = (state, selectionStart, selectionEnd) => {
+  return state.withMutations(map => {
+    map.update('text', oldText => {
+      const selection = oldText.slice(selectionStart, selectionEnd);
+      return `${oldText.slice(0, selectionStart)}${selection ? creepify.encode(selection) : ''}${oldText.slice(selectionEnd)}`;
+    });
+    map.set('focusDate', new Date());
+    map.set('idempotencyKey', uuid());
+    map.set('caretPosition', selectionEnd + 1);
   });
 };
 
@@ -355,6 +371,8 @@ export default function compose(state = initialState, action) {
     return translate(state, action.text);
   case COMPOSE_DAKUONIZE:
     return dakuonize(state);
+  case COMPOSE_GLITCH:
+    return glitch(state, action.selectionStart, action.selectionEnd);
   case COMPOSE_RANDOMIZE:
     return randomize(state, action.text);
   case COMPOSE_FURIGANA_INSERT:

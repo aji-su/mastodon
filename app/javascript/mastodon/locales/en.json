@@ -81,6 +81,7 @@
   "compose_form.spoiler_placeholder": "Write your warning here",
   "compose_form.edit_menu": "Edit menu",
   "compose_form.dakuonize": "Dakuonize",
+  "compose_form.glitch": "Glitch selected text",
   "compose_form.randomize_with_regex": "Randomize with Regex",
   "compose_form.add_furigana": "Add furigana",
   "compose_form.open_oekaki_app": "Open oekaki app",

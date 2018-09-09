@@ -64,6 +64,7 @@
     "is-nan": "^1.2.1",
     "js-yaml": "^3.11.0",
     "lodash": "^4.17.5",
+    "lunicode-creepify": "^1.0.1",
     "mark-loader": "^0.1.6",
     "marky": "^1.2.0",
     "mini-css-extract-plugin": "^0.4.1",
