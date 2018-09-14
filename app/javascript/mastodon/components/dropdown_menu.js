@@ -23,6 +23,7 @@ class DropdownMenu extends React.PureComponent {
     placement: PropTypes.string,
     arrowOffsetLeft: PropTypes.string,
     arrowOffsetTop: PropTypes.string,
+    openedViaKeyboard: PropTypes.bool,
     dropdownMenuClassName: PropTypes.string,
   };
 
@@ -43,13 +44,15 @@ class DropdownMenu extends React.PureComponent {
 
   componentDidMount () {
     document.addEventListener('click', this.handleDocumentClick, false);
+    document.addEventListener('keydown', this.handleKeyDown, false);
     document.addEventListener('touchend', this.handleDocumentClick, listenerOptions);
-    if (this.focusedItem) this.focusedItem.focus();
+    if (this.focusedItem && this.props.openedViaKeyboard) this.focusedItem.focus();
     this.setState({ mounted: true });
   }
 
   componentWillUnmount () {
     document.removeEventListener('click', this.handleDocumentClick, false);
+    document.removeEventListener('keydown', this.handleKeyDown, false);
     document.removeEventListener('touchend', this.handleDocumentClick, listenerOptions);
   }
 
@@ -63,13 +66,10 @@ class DropdownMenu extends React.PureComponent {
 
   handleKeyDown = e => {
     const items = Array.from(this.node.getElementsByTagName('a'));
-    const index = items.indexOf(e.currentTarget);
+    const index = items.indexOf(document.activeElement);
     let element;
 
     switch(e.key) {
-    case 'Enter':
-      this.handleClick(e);
-      break;
     case 'ArrowDown':
       element = items[index+1];
       if (element) {
@@ -97,6 +97,12 @@ class DropdownMenu extends React.PureComponent {
     }
   }
 
+  handleItemKeyDown = e => {
+    if (e.key === 'Enter') {
+      this.handleClick(e);
+    }
+  }
+
   handleClick = e => {
     const i = Number(e.currentTarget.getAttribute('data-index'));
     const { action, to } = this.props.items[i];
@@ -121,7 +127,7 @@ class DropdownMenu extends React.PureComponent {
 
     return (
       <li className='dropdown-menu__item' key={`${text}-${i}`}>
-        <a href={href} target='_blank' rel='noopener' role='button' tabIndex='0' ref={i === 0 ? this.setFocusRef : null} onClick={this.handleClick} onKeyDown={this.handleKeyDown} data-index={i}>
+        <a href={href} target='_blank' rel='noopener' role='button' tabIndex='0' ref={i === 0 ? this.setFocusRef : null} onClick={this.handleClick} onKeyDown={this.handleItemKeyDown} data-index={i}>
           {text}
         </a>
       </li>
@@ -172,6 +178,7 @@ export default class Dropdown extends React.PureComponent {
     onClose: PropTypes.func.isRequired,
     dropdownPlacement: PropTypes.string,
     openDropdownId: PropTypes.number,
+    openedViaKeyboard: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -182,14 +189,14 @@ export default class Dropdown extends React.PureComponent {
     id: id++,
   };
 
-  handleClick = ({ target }) => {
+  handleClick = ({ target, type }) => {
     if (this.state.id === this.props.openDropdownId) {
       this.handleClose();
     } else {
       const { top } = target.getBoundingClientRect();
       const placement = top * 2 < innerHeight ? 'bottom' : 'top';
 
-      this.props.onOpen(this.state.id, this.handleItemClick, placement);
+      this.props.onOpen(this.state.id, this.handleItemClick, placement, type !== 'click');
     }
   }
 
@@ -199,6 +206,11 @@ export default class Dropdown extends React.PureComponent {
 
   handleKeyDown = e => {
     switch(e.key) {
+    case ' ':
+    case 'Enter':
+      this.handleClick(e);
+      e.preventDefault();
+      break;
     case 'Escape':
       this.handleClose();
       break;
@@ -235,7 +247,7 @@ export default class Dropdown extends React.PureComponent {
   }
 
   render () {
-    const { icon, items, size, title, disabled, dropdownPlacement, openDropdownId, dropdownMenuClassName } = this.props;
+    const { icon, items, size, title, disabled, dropdownPlacement, openDropdownId, openedViaKeyboard, dropdownMenuClassName } = this.props;
     const open = this.state.id === openDropdownId;
 
     return (
@@ -251,7 +263,7 @@ export default class Dropdown extends React.PureComponent {
         />
 
         <Overlay show={open} placement={dropdownPlacement} target={this.findTarget}>
-          <DropdownMenu items={items} onClose={this.handleClose} dropdownMenuClassName={dropdownMenuClassName} />
+          <DropdownMenu items={items} onClose={this.handleClose} openedViaKeyboard={openedViaKeyboard} dropdownMenuClassName={dropdownMenuClassName} />
         </Overlay>
       </div>
     );
