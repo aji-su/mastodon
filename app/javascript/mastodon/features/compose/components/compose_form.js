@@ -42,8 +42,8 @@ const messages = defineMessages({
   open_oekaki_app: { id: 'compose_form.open_oekaki_app', defaultMessage: 'Open oekaki app' },
 });
 
-@injectIntl
-export default class ComposeForm extends ImmutablePureComponent {
+export default @injectIntl
+class ComposeForm extends ImmutablePureComponent {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,

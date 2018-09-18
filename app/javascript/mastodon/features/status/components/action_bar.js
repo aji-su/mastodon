@@ -30,8 +30,8 @@ const messages = defineMessages({
   decode_naraku: { id: 'status.decode_naraku', defaultMessage: 'Decode Naraku-moji' },
 });
 
-@injectIntl
-export default class ActionBar extends React.PureComponent {
+export default @injectIntl
+class ActionBar extends React.PureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
