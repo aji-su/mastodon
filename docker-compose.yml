@@ -6,30 +6,18 @@ services:
     image: postgres:9.6-alpine
     networks:
       - internal_network
-### Uncomment to enable DB persistance
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
-      - ./postgres_conf/postgresql.conf:/etc/postgresql/postgresql.conf
-    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: "172.16.1.1:24224"
-        tag: "docker.{{.Name}}"
+### Uncomment to enable DB persistence
+#    volumes:
+#      - ./postgres:/var/lib/postgresql/data
 
   redis:
     restart: always
     image: redis:4.0-alpine
     networks:
       - internal_network
-### Uncomment to enable REDIS persistance
-    volumes:
-      - ./redis:/data
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: "172.16.1.1:24224"
-        tag: "docker.{{.Name}}"
+### Uncomment to enable REDIS persistence
+#    volumes:
+#      - ./redis:/data
 
 #  es:
 #    restart: always
@@ -42,7 +30,7 @@ services:
 ##    volumes:
 ##      - ./elasticsearch:/usr/share/elasticsearch/data
 
-  web: &mastodon
+  web:
     build: .
     image: luckybeastakatheboss/mastodon
     restart: always
@@ -51,72 +39,44 @@ services:
     networks:
       - external_network
       - internal_network
+    ports:
+      - "127.0.0.1:3000:3000"
     depends_on:
       - db
       - redis
 #      - es
     volumes:
-      - ./public/assets:/mastodon/public/assets
-      - ./public/packs:/mastodon/public/packs
       - ./public/system:/mastodon/public/system
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: "172.16.1.1:24224"
-        tag: "docker.{{.Name}}"
 
   streaming:
-    <<: *mastodon
-    command: yarn start
-
-  sidekiq_default:
-    <<: *mastodon
-    environment:
-      - DB_POOL=10
-    command: bundle exec sidekiq -c 10 -q default
-
-  sidekiq_push:
-    <<: *mastodon
-    environment:
-      - DB_POOL=5
-    command: bundle exec sidekiq -c 5 -q push
-
-  sidekiq_pull:
-    <<: *mastodon
-    environment:
-      - DB_POOL=5
-    command: bundle exec sidekiq -c 5 -q pull
-
-  sidekiq_mailers:
-    <<: *mastodon
-    environment:
-      - DB_POOL=1
-    command: bundle exec sidekiq -c 1 -q mailers
-
-  https-portal:
-    image: steveltn/https-portal:1
+    build: .
+    image: tootsuite/mastodon
     restart: always
     env_file: .env.production
+    command: yarn start
+    networks:
+      - external_network
+      - internal_network
     ports:
-      - '80:80'
-      - '443:443'
+      - "127.0.0.1:4000:4000"
     depends_on:
-      - web
-      - streaming
+      - db
+      - redis
+
+  sidekiq:
+    build: .
+    image: tootsuite/mastodon
+    restart: always
+    env_file: .env.production
+    command: bundle exec sidekiq -q default -q push -q mailers -q pull
+    depends_on:
+      - db
+      - redis
     networks:
       - external_network
       - internal_network
     volumes:
-      - ./ssl_certs:/var/lib/https-portal
-      - ./nginx-conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
-      - ./nginx-conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
-      - ./public:/var/lib/mastodon/public
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: "172.16.1.1:24224"
-        tag: "docker.{{.Name}}"
-
+      - ./public/system:/mastodon/public/system
 ## Uncomment to enable federation with tor instances along with adding the following ENV variables
 ## http_proxy=http://privoxy:8118
 ## ALLOW_ACCESS_TO_HIDDEN_SERVICE=true

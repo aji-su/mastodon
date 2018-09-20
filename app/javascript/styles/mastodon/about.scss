@@ -649,21 +649,6 @@ $small-breakpoint: 960px;
     }
   }
 
-  .cover-art {
-    width: 100%;
-    height: 100%;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-    .about{
-      background-color: #f3f5f7;
-    }
-    .more {
-      background-color: $ui-base-color;
-    }
-  }
-
   .header {
     line-height: 30px;
     overflow: hidden;
