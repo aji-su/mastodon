@@ -1,18 +1,11 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/node:latest-browsers
-    working_directory: ~/repo
+    machine: true
     steps:
-      - run: git clone --depth 1 https://github.com/theboss/mastodon-builder-ec2.git .
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run: yarn main
+      - checkout
+      - run: |
+          docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+          touch .env.production
+          docker-compose build web
+          docker-compose push web
