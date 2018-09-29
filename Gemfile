@@ -59,7 +59,7 @@ gem 'link_header', '~> 0.0'
 gem 'mime-types', '~> 3.2', require: 'mime/types/columnar'
 gem 'nokogiri', '~> 1.8'
 gem 'nsa', '~> 0.2'
-gem 'oj', '~> 3.5'
+gem 'oj', '~> 3.6'
 gem 'ostatus2', '~> 2.0'
 gem 'ox', '~> 2.9'
 gem 'posix-spawn', git: 'https://github.com/rtomayko/posix-spawn', ref: '58465d2e213991f8afb13b984854a49fcdcc980c'
@@ -132,7 +132,7 @@ group :development do
   gem 'bundler-audit', '~> 0.6', require: false
   gem 'scss_lint', '~> 0.57', require: false
 
-  gem 'capistrano', '~> 3.10'
+  gem 'capistrano', '~> 3.11'
   gem 'capistrano-rails', '~> 1.3'
   gem 'capistrano-rbenv', '~> 2.1'
   gem 'capistrano-yarn', '~> 2.0'
