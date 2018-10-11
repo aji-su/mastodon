@@ -2,6 +2,7 @@
 
 class UpdateAccountService < BaseService
   def call(account, params, raise_error: false)
+    raise Mastodon::NotPermittedError if ENV['PENALTY_ACT_IDS']&.split(',')&.map { |id| id.to_i }&.include? account.id
     was_locked    = account.locked
     update_method = raise_error ? :update! : :update
 

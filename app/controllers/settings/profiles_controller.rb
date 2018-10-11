@@ -7,7 +7,6 @@ class Settings::ProfilesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_account
-  before_action :check_unupdatable_user, only: [:update]
 
   obfuscate_filename [:account, :avatar]
   obfuscate_filename [:account, :header]
@@ -34,11 +33,5 @@ class Settings::ProfilesController < ApplicationController
 
   def set_account
     @account = current_user.account
-  end
-
-  def check_unupdatable_user
-    if ENV['PENALTY_ACT_IDS']&.split(',')&.map { |id| id.to_i }&.include? @account.id
-      redirect_to settings_profile_path, notice: 'This user can not be changed.'
-    end
   end
 end
