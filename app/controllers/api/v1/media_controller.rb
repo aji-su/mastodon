@@ -40,7 +40,7 @@ class Api::V1::MediaController < Api::BaseController
   end
 
   def check_unuploadable_user
-    if ENV['PENALTY_ACT_IDS']&.split(',')&.map { |id| id.to_i }&.include? current_user.id
+    if ENV['PENALTY_ACT_IDS']&.split(',')&.map { |id| id.to_i }&.include? current_user.account.id
       render json: { error: 'Forbidden' }, status: 403
     end
   end
