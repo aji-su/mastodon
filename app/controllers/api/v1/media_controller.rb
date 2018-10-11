@@ -3,6 +3,7 @@
 class Api::V1::MediaController < Api::BaseController
   before_action -> { doorkeeper_authorize! :write, :'write:media' }
   before_action :require_user!
+  before_action :check_unuploadable_user, only: [:create]
 
   include ObfuscateFilename
   obfuscate_filename :file
@@ -36,5 +37,11 @@ class Api::V1::MediaController < Api::BaseController
 
   def processing_error
     { error: 'Error processing thumbnail for uploaded media' }
+  end
+
+  def check_unuploadable_user
+    if ENV['PENALTY_ACT_IDS']&.split(',')&.map { |id| id.to_i }&.include? current_user.id
+      render json: { error: 'Forbidden' }, status: 403
+    end
   end
 end
