@@ -159,11 +159,13 @@ export function submitCompose(routerHistory, primary) {
         }
       };
 
-      if (response.data.visibility === 'direct' && getState().getIn(['conversations', 'mounted']) <= 0) {
+      if (response.data.visibility === 'direct' && getState().getIn(['conversations', 'mounted']) <= 0 && routerHistory) {
         routerHistory.push('/timelines/direct');
       } else if (response.data.visibility !== 'direct') {
         insertIfOnline('home');
-      } else if (response.data.in_reply_to_id === null && response.data.visibility === 'public') {
+      }
+
+      if (response.data.in_reply_to_id === null && response.data.visibility === 'public') {
         if (hasDefaultHashtag) {
           // Refresh the community timeline only if there is default hashtag
           insertIfOnline('community');
