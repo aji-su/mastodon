@@ -61,6 +61,7 @@ class ComposeForm extends ImmutablePureComponent {
     caretPosition: PropTypes.number,
     preselectDate: PropTypes.instanceOf(Date),
     is_submitting: PropTypes.bool,
+    is_changing_upload: PropTypes.bool,
     is_uploading: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
@@ -99,10 +100,14 @@ class ComposeForm extends ImmutablePureComponent {
     }
 
     // Submit disabled:
-    const { is_submitting, is_uploading, anyMedia } = this.props;
+    const { is_submitting, is_changing_upload, is_uploading, anyMedia } = this.props;
     const fulltext = [this.props.spoiler_text, countableText(this.props.text)].join('');
 
+<<<<<<< HEAD
     if (is_submitting || is_uploading || length(fulltext) > 1000 || (fulltext.length !== 0 && fulltext.trim().length === 0 && !anyMedia)) {
+=======
+    if (is_submitting || is_uploading || is_changing_upload || length(fulltext) > 500 || (fulltext.length !== 0 && fulltext.trim().length === 0 && !anyMedia)) {
+>>>>>>> feature-default-hashtag-timeline
       return;
     }
 
@@ -211,7 +216,7 @@ class ComposeForm extends ImmutablePureComponent {
     const { intl, onPaste, showSearch, anyMedia } = this.props;
     const disabled = this.props.is_submitting;
     const text     = [this.props.spoiler_text, countableText(this.props.text)].join('');
-    const disabledButton = disabled || this.props.is_uploading || length(text) > 1000 || (text.length !== 0 && text.trim().length === 0 && !anyMedia);
+    const disabledButton = disabled || this.props.is_uploading || this.props.is_changing_upload || length(text) > 1000 || (text.length !== 0 && text.trim().length === 0 && !anyMedia);
     let publishText = '';
     let secondaryPublishText = '';
 
