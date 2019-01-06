@@ -205,7 +205,7 @@ class ComposeForm extends ImmutablePureComponent {
   }
 
   handleOekakiClick() {
-    window.open('https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/#theboss.tech');
+    window.open('https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/#masi.theboss.tech');
   }
 
   render () {
