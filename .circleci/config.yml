@@ -7,5 +7,5 @@ jobs:
       - run: |
           docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
           touch .env.production
-          docker-compose build web
+          docker-compose build --build-arg DEFAULT_HASHTAG=${DEFAULT_HASHTAG} web
           docker-compose push web
